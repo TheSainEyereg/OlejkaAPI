@@ -1,13 +1,26 @@
+const fs = require("fs");
 const express = require("express");
-const config = require("./config.json");
 process.on("unhandledRejection", e => {console.error(e)});
+let config = require("./config.json"); // let cuz it should update in realtime
+
+let fsout;
+fs.watch("./config.json", (event,fn) => {
+    if(!fsout) {
+        fsout = 1;
+        setTimeout(_=>{
+            console.log("Updated config.json!")
+            delete require.cache[require.resolve("./config.json")];
+            config = require("./config.json");
+            fsout=0
+        }, 100)
+    }
+});
 
 const app = express();
-const port = 5050
 
-app.listen(port, e => {
+app.listen(config.port, e => {
     if (e) {console.error(e); return process.exit(1)}
-    console.log("Server started at http://127.0.0.1:"+port);
+    console.log("Server started at http://127.0.0.1:"+config.port);
 });
 
 app.get("/", (req,res) => res.send("Olejka API v2"))
@@ -47,7 +60,6 @@ app.get("/audio/sc/:user/:track", async (req,res) => {
 /*   ~~~   FILES   ~~~   */
 const os = require("os");
 const filedir = (config.uploadHome ? os.homedir() : ".") + config.uploadDir + "/";
-const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const multer = require("multer");
