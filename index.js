@@ -2,6 +2,7 @@ const fs = require("fs");
 const express = require("express");
 process.on("unhandledRejection", e => {console.error(e)});
 let config = require("./config.json"); // let cuz it should update in realtime
+let filedir = (config.uploadHome ? os.homedir() : ".") + config.uploadDir + "/";
 
 let fsout;
 fs.watch("./config.json", (event,fn) => {
@@ -11,19 +12,19 @@ fs.watch("./config.json", (event,fn) => {
             console.log("Updated config.json!")
             delete require.cache[require.resolve("./config.json")];
             config = require("./config.json");
+            filedir = (config.uploadHome ? os.homedir() : ".") + config.uploadDir + "/";
             fsout=0
         }, 100)
     }
 });
 
 const app = express();
-
 app.listen(config.port, e => {
     if (e) {console.error(e); return process.exit(1)}
     console.log("Server started at http://127.0.0.1:"+config.port);
 });
 
-app.get("/", (req,res) => res.send("Olejka API v2"))
+app.get("/", (req,res) => res.send("Olejka API v2"));
 
 /*   ~~~   AUDIO   ~~~   */
 const scdl = require("soundcloud-downloader").default;
@@ -59,7 +60,6 @@ app.get("/audio/sc/:user/:track", async (req,res) => {
 
 /*   ~~~   FILES   ~~~   */
 const os = require("os");
-const filedir = (config.uploadHome ? os.homedir() : ".") + config.uploadDir + "/";
 const path = require("path");
 const crypto = require("crypto");
 const multer = require("multer");
@@ -72,15 +72,15 @@ app.post("/files/upload/", upload.single("file") ,async (req,res) => {
     const file = req.file;
     const ext= path.extname(file.originalname);
     if (!config.uploadExts.includes(ext.slice(1))) return res.status(406).json({error: "File format is not allowed!"});
-    const md5sum = crypto.createHash("md5").update(file.buffer).digest("hex");
-    const filename = md5sum.slice(-8)+ext;
+    const md5sum = crypto.createHash("md5").update(file.buffer).digest();
+    const filename = md5sum.toString("hex").slice(-12)+ext;
     if (!fs.existsSync(filedir+filename)) fs.writeFileSync(filedir+filename, file.buffer);
-    const md5stamp = crypto.createHash("md5").update(fs.statSync(filedir+filename).birthtime.getTime().toString()).digest("hex");
+    const md5stamp = crypto.createHash("md5").update(fs.statSync(filedir+filename).birthtime.getTime().toString()).digest("base64url");
     res.json({
         filename: filename,
         original: file.originalname,
         get: `/files/get/${filename}`,
-        delete: `/files/delete/${filename}/${md5sum.slice(13,19)}_${md5stamp.slice(14,22)}`
+        delete: `/files/delete/${filename}/${md5sum.toString("base64url").slice(7,13)+crypto.randomBytes(1).toString("base64url")+md5stamp.slice(8,16)}`
     })
 })
 const mime = require("mime");
@@ -97,11 +97,11 @@ app.get("/files/get/:filename", async (req, res) => {
 app.get("/files/delete/:filename/:key?", async (req,res) => {
     const file = filedir + req.params.filename;
     if (!fs.existsSync(file)) return res.sendStatus(404);
-    const md5sum = crypto.createHash("md5").update(fs.readFileSync(file)).digest("hex");
-    const md5stamp = crypto.createHash("md5").update(fs.statSync(file).birthtime.getTime().toString()).digest("hex");
-    if (req.params.key !== `${md5sum.slice(13,19)}_${md5stamp.slice(14,22)}`) return res.status(403).json({error: "Wrong delete key"});
+    const md5sum = crypto.createHash("md5").update(fs.readFileSync(file)).digest("base64url");
+    const md5stamp = crypto.createHash("md5").update(fs.statSync(file).birthtime.getTime().toString()).digest("base64url");
+    if (req.params.key.slice(0,6) != md5sum.slice(7,13) || req.params.key.slice(-8) != md5stamp.slice(8,16)) return res.status(403).json({error: "Wrong delete key"});
+    console.log()
     fs.rmSync(file);
-    res.json({
-        filename: req.params.filename
-    })
+    res.sendStatus(200);
 })
+/*   ~~~   ~~~   ~~~   */
