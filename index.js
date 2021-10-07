@@ -25,6 +25,10 @@ app.listen(config.port, e => {
     if (e) {console.error(e); return process.exit(1)}
     console.log("Server started at http://127.0.0.1:"+config.port);
 });
+app.use((req, res, next) => {
+    res.setHeader("Olejka-Service", "APIv2")
+    next();
+});
 
 app.get("/", (req,res) => res.send("Olejka API v2"));
 
