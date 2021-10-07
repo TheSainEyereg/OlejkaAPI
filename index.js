@@ -1,4 +1,6 @@
+const os = require("os");
 const fs = require("fs");
+const path = require("path");
 const express = require("express");
 process.on("unhandledRejection", e => {console.error(e)});
 let config = require("./config.json"); // let cuz it should update in realtime
@@ -59,8 +61,6 @@ app.get("/audio/sc/:user/:track", async (req,res) => {
 })
 
 /*   ~~~   FILES   ~~~   */
-const os = require("os");
-const path = require("path");
 const crypto = require("crypto");
 const multer = require("multer");
 const upload = multer({storage: multer.memoryStorage()});
