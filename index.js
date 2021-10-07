@@ -77,7 +77,7 @@ app.post("/files/upload/", upload.single("file") ,async (req,res) => {
     const ext= path.extname(file.originalname);
     if (!config.uploadExts.includes(ext.slice(1))) return res.status(406).json({error: "File format is not allowed!"});
     const md5sum = crypto.createHash("md5").update(file.buffer).digest();
-    const filename = md5sum.toString("hex").slice(-12)+ext;
+    const filename = md5sum.toString("hex").slice(-10)+ext;
     if (!fs.existsSync(filedir+filename)) fs.writeFileSync(filedir+filename, file.buffer);
     const md5stamp = crypto.createHash("md5").update(fs.statSync(filedir+filename).birthtime.getTime().toString()).digest("base64url");
     res.json({
