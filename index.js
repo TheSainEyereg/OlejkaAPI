@@ -111,7 +111,12 @@ app.get("/files/get/:filename", async (req, res) => {
         const watermark = await Canvas.loadImage(config.uploadWatermarkUrl);
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
         ctx.globalAlpha = 0.6
-        const watermarkSize = canvas.height * config.uploadWatermarkSize.mult < config.uploadWatermarkSize.max ? canvas.height * config.uploadWatermarkSize.mult : config.uploadWatermarkSize.max;
+        const watermarkSize = (_ => {
+            const min = canvas.width < canvas.height ? canvas.width : canvas.height;
+            if (min * config.uploadWatermarkSize.mult > config.uploadWatermarkSize.max) return config.uploadWatermarkSize.max
+            else if (min * config.uploadWatermarkSize.mult < config.uploadWatermarkSize.min) return config.uploadWatermarkSize.min
+            else return min * config.uploadWatermarkSize.mult
+        })()
         ctx.drawImage(watermark, canvas.width - watermarkSize*1.2, canvas.height - watermarkSize*1.2, watermarkSize, watermarkSize);
         buffer = canvas.toBuffer();
     }
