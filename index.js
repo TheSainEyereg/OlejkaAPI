@@ -88,15 +88,34 @@ app.post("/files/upload/", upload.single("file") ,async (req,res) => {
     })
 })
 const mime = require("mime");
+const Canvas = require("canvas");
+const imageSize = require("image-size");
 app.get("/files/get/:filename", async (req, res) => {
     const file = filedir + req.params.filename;
+    const ext = path.extname(req.params.filename);
     if (!fs.existsSync(file)) return res.sendStatus(404);
-    const buffer = fs.readFileSync(file);
-    res.set({
-        "Content-Type": mime.getType(path.extname(req.params.filename)),
-        "Content-Length": buffer.length
-    })
-    res.send(buffer);
+    let buffer = fs.readFileSync(file);
+    const send = _ => {
+        res.set({
+            "Content-Type": mime.getType(ext),
+            "Content-Length": buffer.length
+        })
+        res.send(buffer);
+    }
+    if (config.uploadWatermark && config.uploadWatermarkExts.includes(ext.slice(1)) && mime.getType(ext).includes("image")) {
+        const size = imageSize(file);
+        const canvas = Canvas.createCanvas(size.width, size.height);
+        const ctx = canvas.getContext("2d");
+        const background = new Canvas.Image();
+        background.src = buffer;
+        const watermark = await Canvas.loadImage(config.uploadWatermarkUrl);
+        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = 0.6
+        const watermarkSize = canvas.height * config.uploadWatermarkSize.mult < config.uploadWatermarkSize.max ? canvas.height * config.uploadWatermarkSize.mult : config.uploadWatermarkSize.max;
+        ctx.drawImage(watermark, canvas.width - watermarkSize*1.2, canvas.height - watermarkSize*1.2, watermarkSize, watermarkSize);
+        buffer = canvas.toBuffer();
+    }
+    send()
 })
 app.get("/files/delete/:filename/:key?", async (req,res) => {
     const file = filedir + req.params.filename;

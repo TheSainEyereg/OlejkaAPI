@@ -12,7 +12,9 @@
   "author": "Olejka",
   "license": "MIT",
   "dependencies": {
+    "canvas": "^2.8.0",
     "express": "^4.17.1",
+    "image-size": "^1.0.0",
     "mime": "^2.5.2",
     "multer": "^1.4.3",
     "soundcloud-downloader": "^1.0.0",
