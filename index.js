@@ -25,12 +25,18 @@ app.listen(config.port, e => {
     if (e) {console.error(e); return process.exit(1)}
     console.log("Server started at http://127.0.0.1:"+config.port);
 });
-app.use((req, res, next) => {
-    res.setHeader("Olejka-Service", "APIv2")
-    next();
-});
 
-app.get("/", (req,res) => res.send("Olejka API v2"));
+let load, time;
+app.use((req, res, next) => {
+    res.setHeader("Olejka-Service", "APIv2");
+    res.setHeader("Content-Type", "text/plain");
+    res.setHeader("System-Load", load = os.loadavg()[0] / os.cpus().length);
+    res.setHeader("System-Time", time = new Date().getTime());
+    if (load > config.maxLoad) return res.sendStatus(503)
+    next()
+});
+app.get("/", (req,res) => res.send(`Olejka API v2\n\nTime: ${time}\nLoad: ${load}`));
+
 
 /*   ~~~   AUDIO   ~~~   */
 const scdl = require("soundcloud-downloader").default;
@@ -95,14 +101,8 @@ app.get("/files/get/:filename", async (req, res) => {
     const ext = path.extname(req.params.filename);
     if (!fs.existsSync(file)) return res.sendStatus(404);
     let buffer = fs.readFileSync(file);
-    const send = _ => {
-        res.set({
-            "Content-Type": mime.getType(ext),
-            "Content-Length": buffer.length
-        })
-        res.send(buffer);
-    }
-    if (config.uploadWatermark && config.uploadWatermarkExts.includes(ext.slice(1)) && mime.getType(ext).includes("image")) {
+
+    if (!(load > config.uploadWatermarkLoad) && config.uploadWatermark && config.uploadWatermarkExts.includes(ext.slice(1)) && mime.getType(ext).includes("image")) {
         const size = imageSize(file);
         const canvas = Canvas.createCanvas(size.width, size.height);
         const ctx = canvas.getContext("2d");
@@ -120,7 +120,11 @@ app.get("/files/get/:filename", async (req, res) => {
         ctx.drawImage(watermark, canvas.width - watermarkSize*1.2, canvas.height - watermarkSize*1.2, watermarkSize, watermarkSize);
         buffer = canvas.toBuffer();
     }
-    send()
+    res.set({
+        "Content-Type": mime.getType(ext),
+        "Content-Length": buffer.length
+    })
+    res.send(buffer);
 })
 app.get("/files/delete/:filename/:key?", async (req,res) => {
     const file = filedir + req.params.filename;
