@@ -60,10 +60,34 @@ app.get("/audio/yt/:id", async (req,res) => {
     if (!info) return res.sendStatus(404);
     try {
         const stream = await ytdl(info.videoDetails.videoId, {filter: "audioonly", quality: "highestaudio"});
+
+		// Create buffer array
+		const buffer = [];
+
+		//Get stream length
+		const streamLength = await new Promise((resolve, reject) => {
+			let length = 0;
+			stream.on("data", chunk => {
+				length += chunk.length;
+				buffer.push(chunk);
+			});
+			stream.on("end", () => {
+				resolve(length);
+			});
+			stream.on("error", reject);
+		});
+
+		const duration = streamLength;
+		const start = req.query.start || 0;
+		const end = req.query.end || duration;
+		
         res.writeHead(200, {
-            "Content-Type": "audio/mpeg"
+            "Content-Type": "audio/mpeg",
+			"Content-Length": (end - start),
+			"Content-Range": `bytes ${start}-${end}/${duration}`,
+			"Accept-Ranges": "bytes"
         });
-        stream.pipe(res);
+		res.end(Buffer.concat(buffer.slice(start, end)));
     } catch (e) {
         console.log(e);
         res.sendStatus(500);
@@ -74,10 +98,35 @@ app.get("/audio/sc/:user/:track", async (req,res) => {
     if (!info) return res.sendStatus(404);
     try {
         const stream = await scdl.download(info.permalink_url, config.SCClient);
+
+		// Create buffer array
+		const buffer = [];
+
+		//Get stream length
+		const streamLength = await new Promise((resolve, reject) => {
+			let length = 0;
+			stream.on("data", chunk => {
+				length += chunk.length;
+				buffer.push(chunk);
+			});
+			stream.on("end", () => {
+				resolve(length);
+			});
+			stream.on("error", reject);
+		});
+
+		const duration = streamLength;
+		const start = req.query.start || 0;
+		const end = req.query.end || duration;
+
         res.writeHead(200, {
-            "Content-Type": "audio/mpeg"
+            "Content-Type": "audio/mpeg",
+			"Content-Length": (end - start),
+			"Content-Range": `bytes ${start}-${end}/${duration}`,
+			"Accept-Ranges": "bytes"
         });
-        stream.pipe(res);
+		res.end(Buffer.concat(buffer.slice(start, end)));
+
     } catch (e) {
         console.log(e);
         res.sendStatus(500);
@@ -110,6 +159,7 @@ app.post("/files/upload/", upload.single("file") ,async (req,res) => {
 const mime = require("mime");
 const Canvas = require("canvas");
 const imageSize = require("image-size");
+const { Stream } = require("stream");
 app.get("/files/get/:filename", async (req, res) => {
     const file = filePath + req.params.filename;
     const ext = path.extname(req.params.filename);
