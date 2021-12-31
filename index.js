@@ -2,7 +2,9 @@ const os = require("os");
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
+
 process.on("unhandledRejection", e => {console.error(e)});
+
 let config, filePath;
 let loadConfig = () => {
 	if (fs.existsSync("./config.json")) {
@@ -33,6 +35,7 @@ fs.watch("./config.json", (event,fn) => {
     }
 });
 
+
 const app = express();
 app.listen(config.port || 5050, e => {
     if (e) {console.error(e); return process.exit(1)}
@@ -42,14 +45,15 @@ app.listen(config.port || 5050, e => {
 let load, time;
 app.use((req, res, next) => {
     res.setHeader("Olejka-Service", "APIv2");
-    res.setHeader("Content-Type", "text/plain");
+    res.setHeader("Content-Type", "application/json");
     res.setHeader("System-Load", load = os.loadavg()[0] / os.cpus().length);
     res.setHeader("System-Time", time = new Date().getTime());
 	if (config.error) return res.status(500).json(config);
     if (load > config.maxLoad) return res.sendStatus(503)
     next()
 });
-app.get("/", (req,res) => res.send(`Olejka API v2\n\nTime: ${time}\nLoad: ${load}`));
+
+app.get("/", (req,res) => res.setHeader("Content-Type", "text/plain").send(`Olejka API v2\n\nTime: ${time}\nLoad: ${load}`));
 
 
 /*   ~~~   AUDIO   ~~~   */
@@ -93,6 +97,7 @@ app.get("/audio/yt/:id", async (req,res) => {
         res.sendStatus(500);
     }
 })
+
 app.get("/audio/sc/:user/:track", async (req,res) => {
     const info = await scdl.getInfo(`https://soundcloud.com/${req.params.user}/${req.params.track}`);
     if (!info) return res.sendStatus(404);
@@ -135,13 +140,22 @@ app.get("/audio/sc/:user/:track", async (req,res) => {
 
 /*   ~~~   FILES   ~~~   */
 const crypto = require("crypto");
-const multer = require("multer");
+
+const multer = require("multer"); // Parser for multipart/form-data
 const upload = multer({storage: multer.memoryStorage()});
 app.post("/files/upload/", upload.single("file") ,async (req,res) => {
     if (!fs.existsSync(filePath)) fs.mkdirSync(filePath);
-    if (!req.body.key) return res.status(401).json({error: "No upload key provided!"});
+
+	if (!req.headers["content-length"]) return res.status(400).json({error: "Content-length header should be specified!"});
+	if (parseInt(req.headers["content-length"]) < 53) return res.status(400).json({error: "Content-length is too small!"});
+
+	if (!req.headers["content-type"]?.includes("multipart/form-data")) return res.status(400).json({error: "Invalid content-type! Body not a multipart form-data!"});
+
+	if (!req.body.key) return res.status(401).json({error: "No upload key provided!"});
     if (req.body.key !== config.uploadKey) return res.status(403).json({error: "Wrong upload key!"});
-    if (!req.file) return res.status(406).json({error: "Invalid form data!"});
+
+    if (!req.file) return res.status(406).json({error: "No file provided!"});
+
     const file = req.file;
     const ext= path.extname(file.originalname);
     if (!config.uploadExts.includes(ext.slice(1))) return res.status(415).json({error: "File format is not allowed!"});
@@ -155,18 +169,27 @@ app.post("/files/upload/", upload.single("file") ,async (req,res) => {
         get: `/files/get/${filename}`,
         delete: `/files/delete/${filename}/${md5sum.toString("base64url").slice(7,13)+crypto.randomBytes(1).toString("base64url")+md5stamp.slice(8,16)}`
     })
-})
+}, async (e, req, res, next) => {
+	switch (e.toString()) {
+		case "Error: Unexpected end of multipart data":
+			console.log("Unexpected end of multipart data (wrong Content-Length?)");
+			return res.status(400).json({error: "Unexpected end of multipart data (wrong Content-Length?)"});
+		default:
+			console.log("Unknown error: "+e);
+			return res.status(500).json({error: "Unknown server error!"});
+	}
+});
+
 const mime = require("mime");
 const Canvas = require("canvas");
 const imageSize = require("image-size");
-const { Stream } = require("stream");
 app.get("/files/get/:filename", async (req, res) => {
     const file = filePath + req.params.filename;
     const ext = path.extname(req.params.filename);
     if (!fs.existsSync(file)) return res.sendStatus(404);
     let buffer = fs.readFileSync(file);
 
-    if (!(load > config.uploadWatermarkLoad) && config.uploadWatermark && config.uploadWatermarkExts.includes(ext.slice(1)) && mime.getType(ext).includes("image")) {
+    if (config.uploadWatermark && !(load > config.uploadWatermarkLoad) && config.uploadWatermarkExts.includes(ext.slice(1)) && mime.getType(ext).includes("image")) {
         const size = imageSize(file);
         const canvas = Canvas.createCanvas(size.width, size.height);
         const ctx = canvas.getContext("2d");
@@ -184,19 +207,21 @@ app.get("/files/get/:filename", async (req, res) => {
         ctx.drawImage(watermark, canvas.width - watermarkSize*1.2, canvas.height - watermarkSize*1.2, watermarkSize, watermarkSize);
         buffer = canvas.toBuffer();
     }
-    res.set({
+    res.writeHead(200, {
         "Content-Type": mime.getType(ext),
-        "Content-Length": buffer.length
+        "Content-Length": buffer.length,
+		//"Content-Range": `bytes 0-${buffer.length}/${buffer.length}`,
+		"Accept-Ranges": "bytes"
     })
-    res.send(buffer);
+    res.end(buffer);
 })
+
 app.get("/files/delete/:filename/:key?", async (req,res) => {
     const file = filePath + req.params.filename;
     if (!fs.existsSync(file)) return res.sendStatus(404);
     const md5sum = crypto.createHash("md5").update(fs.readFileSync(file)).digest("base64url");
     const md5stamp = crypto.createHash("md5").update(fs.statSync(file).birthtime.getTime().toString()).digest("base64url");
     if (req.params.key.slice(0,6) != md5sum.slice(7,13) || req.params.key.slice(-8) != md5stamp.slice(8,16)) return res.status(403).json({error: "Wrong delete key"});
-    console.log()
     fs.rmSync(file);
     res.sendStatus(200);
 })
