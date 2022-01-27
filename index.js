@@ -241,6 +241,9 @@ app.get("/discord/embed/", async(req,res) => {
 			${req.query.url ? `<meta property="og:url" content="${req.query.url}" />` : ""}
 			${req.query.description ? `<meta property="og:description" content="${req.query.description}" />` : ""}
 			${req.query.thumbnail ? `<meta property="og:image" content="${req.query.thumbnail}" />` : ""}
+			${req.query.thumbnail_width ? `<meta property="og:image:width" content="${req.query.thumbnail_width}" />` : ""}
+			${req.query.thumbnail_height ? `<meta property="og:image:height" content="${req.query.thumbnail_height}" />` : ""}
+			${req.query.thumbnail_big === "true" ? `<meta name="twitter:card" content="summary_large_image" />` : ""}
 			${req.query.color ? `<meta name="theme-color" content="${req.query.color}" />` : ""}
 			<link type="application/json+oembed" href="${oEmbed}" />
 		</head>
