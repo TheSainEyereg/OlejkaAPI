@@ -2,6 +2,7 @@ const os = require("os");
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
+const cors = require("cors");
 
 process.on("unhandledRejection", e => {console.error(e)});
 
@@ -53,7 +54,7 @@ app.use((req, res, next) => {
 	next()
 });
 
-app.get("/", (req,res) => res.setHeader("Content-Type", "text/plain").send(`Olejka API v2\n\nTime: ${time}\nLoad: ${load}`));
+app.get("/", cors(), (req,res) => res.setHeader("Content-Type", "text/plain").send(`Olejka API v2\n\nTime: ${time}\nLoad: ${load}`));
 
 
 /*   ~~~   AUDIO   ~~~   */
