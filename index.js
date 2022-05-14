@@ -270,7 +270,7 @@ const figlet = require("figlet");
 
 app.get("/figlet/", async(req,res) => {
 	const text = req.query.text
-	const font = req.query.font?.replace(/.?.(\/|\\)/gi, "") || "big";
+	const font = req.query.font?.replace(/.?.(\/|\\)/gi, "") || config.figletDefault;
 	
 	if (!text) return res.status(400).json({error: "No text specified"});
 
