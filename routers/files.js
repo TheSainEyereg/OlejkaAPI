@@ -2,6 +2,7 @@ import { Router } from "express";
 import crypto from "crypto";
 import path from "path";
 import fs from "fs";
+import { config, filePath } from "../components/config.js";
 
 const router = Router();
 

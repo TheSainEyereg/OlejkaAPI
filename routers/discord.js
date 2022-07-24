@@ -1,5 +1,6 @@
 import { Router } from "express";
 const router = Router();
+import { config } from "../components/config.js";
 
 
 router.get("/embed/", async(req,res) => {

@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { config } from "../components/config.js";
 const router = Router();
 
 

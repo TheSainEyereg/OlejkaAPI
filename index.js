@@ -1,43 +1,9 @@
 import os from "os";
-import fs from "fs";
 import express from "express";
 import cors from "cors";
+import { config } from "./components/config.js";
 
 process.on("unhandledRejection", e => {console.error(e)});
-
-let config, filePath;
-const loadConfig = () => {
-	if (fs.existsSync("./config.json")) {
-		config = {error: "No config file found! Create one like GitHub example."};
-	}
-	try {
-		config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
-		filePath = (config.uploadHome ? os.homedir() : ".") + config.uploadDir + "/";
-	} catch (e) {
-		config = {
-			error: "Config file is not valid! Please check your config file.",
-			errorDetails: e.message
-		}	
-	}
-	if (config.error) return console.error(config.error+" ("+config.errorDetails+")");
-	console.log("Loaded config.json!");
-
-	global.config = config;
-	global.filePath = filePath;
-}
-loadConfig();
-
-let fsout;
-fs.watch("./config.json", (event,fn) => {
-	if(!fsout) {
-		fsout = true;
-		setTimeout(_=>{
-			loadConfig();
-			fsout = false;
-		}, 100)
-	}
-});
-
 
 const app = express();
 app.listen(config.port || 5050, e => {
