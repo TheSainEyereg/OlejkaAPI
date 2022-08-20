@@ -1,86 +1,39 @@
 import { Router } from "express";
 import { config } from "../components/config.js";
+
 const router = Router();
 
 
-import scdl from "soundcloud-downloader";
-import ytdl from "ytdl-core";
-router.get("/yt/:id", async (req,res) => {
-	const info = await ytdl.getInfo(`https://www.youtube.com/watch?v=${req.params.id}`);
-	if (!info) return res.sendStatus(404);
+import fetch from "node-fetch"
+const vkModels = ["maria", "pavel", "katherine"];
+router.get("/vk-tts", async (req, res) => {
+	const text = req.query.text;
+	if (!text) return res.status(400).json({error: "No text for TTS provided!"});
+
+	const voice = req.query.voice || config.vkTTSVoice || "pavel";
+	if (!vkModels.includes(voice)) return res.status(400).json({error: `Voice model ${voice} is not available!`, errorDetails: {models: vkModels}});
+
+	const tempo = req.query.tempo || 1;
+	if ((tempo > 2) || (tempo < 0.5)) return res.status(400).json({error: `Voice tempo is incorrect!`, errorDetails: "Tempo param should be between 0.5 and 2!"});
+
 	try {
-		const stream = await ytdl(info.videoDetails.videoId, {filter: "audioonly", quality: "highestaudio"});
-
-		// Create buffer array
-		const buffer = [];
-
-		//Get stream length
-		const streamLength = await new Promise((resolve, reject) => {
-			let length = 0;
-			stream.on("data", chunk => {
-				length += chunk.length;
-				buffer.push(chunk);
-			});
-			stream.on("end", () => {
-				resolve(length);
-			});
-			stream.on("error", reject);
+		const vkRes = await fetch(`https://mcs.mail.ru/tts_demo?encoder=mp3&tempo=${tempo}&model_name=${voice}`, {
+			method: "POST",
+			body: text
 		});
 
-		const duration = streamLength;
-		const start = req.query.start || 0;
-		const end = req.query.end || duration;
-		
-		res.writeHead(200, {
-			"Content-Type": "audio/mpeg",
-			"Content-Length": (end - start),
-			"Content-Range": `bytes ${start}-${end}/${duration}`,
-			"Accept-Ranges": "bytes"
-		});
-		res.end(Buffer.concat(buffer.slice(start, end)));
-	} catch (e) {
-		console.log(e);
-		res.sendStatus(500);
-	}
-})
-
-router.get("/sc/:user/:track", async (req,res) => {
-	const info = await scdl.getInfo(`https://soundcloud.com/${req.params.user}/${req.params.track}`);
-	if (!info) return res.sendStatus(404);
-	try {
-		const stream = await scdl.download(info.permalink_url, config.SCClient);
-
-		// Create buffer array
-		const buffer = [];
-
-		//Get stream length
-		const streamLength = await new Promise((resolve, reject) => {
-			let length = 0;
-			stream.on("data", chunk => {
-				length += chunk.length;
-				buffer.push(chunk);
-			});
-			stream.on("end", () => {
-				resolve(length);
-			});
-			stream.on("error", reject);
-		});
-
-		const duration = streamLength;
-		const start = req.query.start || 0;
-		const end = req.query.end || duration;
+		const buffer = await vkRes.arrayBuffer();
 
 		res.writeHead(200, {
-			"Content-Type": "audio/mpeg",
-			"Content-Length": (end - start),
-			"Content-Range": `bytes ${start}-${end}/${duration}`,
-			"Accept-Ranges": "bytes"
-		});
-		res.end(Buffer.concat(buffer.slice(start, end)));
+			"Content-Type": "audio/mp3",
+			"Content-Length": buffer.byteLength,
+			"accept-ranges": "bytes"
+		})
 
+		res.end(Buffer.from(buffer));
 	} catch (e) {
 		console.log(e);
-		res.sendStatus(500);
+		res.status(500).json({error: "Error in TTS", errorDetails: e});
 	}
 })
 

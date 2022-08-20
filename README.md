@@ -19,9 +19,9 @@ config.json:
 	"uploadDir": "/debug",
 	"uploadHome": false,
 
-	"CSClient": "clientId",
+	"figletDefault": "Big",
 
-	"figletDefault": "Big"
+	"vkTTSVoice": "pavel"
 }
 ```
 

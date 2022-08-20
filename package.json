@@ -13,14 +13,13 @@
   "author": "Olejka",
   "license": "MIT",
   "dependencies": {
-    "canvas": "^2.8.0",
+    "canvas": "^2.9.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "figlet": "^1.5.2",
     "image-size": "^1.0.0",
     "mime": "^2.5.2",
     "multer": "^1.4.3",
-    "soundcloud-downloader": "^1.0.0",
-    "ytdl-core": "^4.9.2"
+    "node-fetch": "^3.2.10"
   }
 }
