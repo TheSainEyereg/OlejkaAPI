@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/app",
+    "migrate": "node src/migrateConfig"
   },
   "keywords": [
     "API"
@@ -13,7 +14,7 @@
   "author": "Olejka",
   "license": "MIT",
   "dependencies": {
-    "canvas": "^2.9.3",
+    "canvas": "^2.10.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "figlet": "^1.5.2",

@@ -7,7 +7,7 @@ import figlet from "figlet";
 
 router.get("/", async(req,res) => {
 	const text = req.query.text
-	const font = req.query.font?.replace(/.?.(\/|\\)/gi, "") || config.figletDefault || "Big";
+	const font = req.query.font?.replace(/.?.(\/|\\)/gi, "") || config.figlet?.defaultFont || "Big";
 	
 	if (!text) return res.status(400).json({error: "No text specified"});
 

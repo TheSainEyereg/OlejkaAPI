@@ -10,7 +10,7 @@ router.get("/vk-tts", async (req, res) => {
 	const text = req.query.text;
 	if (!text) return res.status(400).json({error: "No text for TTS provided!"});
 
-	const voice = req.query.voice || config.vkTTSVoice || "pavel";
+	const voice = req.query.voice || config.audio?.vkTTSVoice || "pavel";
 	if (!vkModels.includes(voice)) return res.status(400).json({error: `Voice model ${voice} is not available!`, errorDetails: {models: vkModels}});
 
 	const tempo = req.query.tempo || 1;

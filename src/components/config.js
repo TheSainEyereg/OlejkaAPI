@@ -1,14 +1,14 @@
 import os from "os";
 import fs from "fs";
 
-let config, filePath;
+let config, uploaderPath;
 const loadConfig = () => {
 	if (fs.existsSync("./config.json")) {
 		config = {error: "No config file found! Create one like GitHub example."};
 	}
 	try {
 		config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
-		filePath = (config.uploadHome ? os.homedir() : ".") + config.uploadDir + "/";
+		uploaderPath = (config.uploader?.useHome ? os.homedir() : ".") + (config.uploader?.path || "/uploads") + "/";
 	} catch (e) {
 		config = {
 			error: "Config file is not valid! Please check your config file.",
@@ -31,4 +31,4 @@ fs.watch("./config.json", (event,fn) => {
 	}
 });
 
-export {config, filePath}
+export {config, uploaderPath}
