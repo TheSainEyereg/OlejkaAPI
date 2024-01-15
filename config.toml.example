@@ -1,0 +1,24 @@
+max_load = 0.75
+master_key = "1337"
+
+[uploader]
+extensions = [
+	"png", "jpg", "bmp", "webp", "ico", "svg", "gif", "apng", "pic",
+	"rar", "zip", "7z",
+	"mp4", "avi",
+	"mp3", "ogg", "opus", "wav",
+	"txt", "cfg", "log", "json", "xml", "yaml", "csv", "yml", "toml",
+	"h", "c", "cpp", "java", "cs", "lua", "html", "css", "js",
+	"exe", "dll"
+]
+path = "debug"
+home = false
+
+[uploader.watermark]
+max_load = 0.5
+url = "file://debug/watermark.png" # http(s):// or file:// url
+extensions = ["png", "jpg", "bmp", "webp"]
+size = [ 0.25, 45, 20 ] # [mult, max, min]
+
+[figlet]
+font = "Big"

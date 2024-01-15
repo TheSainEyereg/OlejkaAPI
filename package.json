@@ -1,26 +1,31 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "description": "api.olejka.ru",
-  "type": "module",
-  "main": "index.js",
-  "scripts": {
-    "start": "node src/app",
-    "migrate": "node src/migrateConfig"
-  },
-  "keywords": [
-    "API"
-  ],
-  "author": "Olejka",
-  "license": "MIT",
-  "dependencies": {
-    "canvas": "^2.10.2",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "figlet": "^1.5.2",
-    "image-size": "^1.0.0",
-    "mime": "^2.5.2",
-    "multer": "^1.4.3",
-    "node-fetch": "^3.2.10"
-  }
+	"name": "api",
+	"version": "2.1.0",
+	"description": "My own API",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/TheSainEyereg/OlejkaAPI.git"
+	},
+	"scripts": {
+		"dev": "nodemon src/app.ts",
+		"dev:debug": "nodemon --inspect src/app.ts",
+		"lint": "eslint src/**/*.ts",
+		"build": "tsc",
+		"start": "node dist/app"
+	},
+	"dependencies": {
+		"dotenv": "^16.3.1",
+		"fastify": "^4.24.3",
+		"toml": "^3.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^20.10.2",
+		"@typescript-eslint/eslint-plugin": "^6.13.1",
+		"@typescript-eslint/parser": "^6.13.1",
+		"eslint": "^8.55.0",
+		"nodemon": "^3.0.2",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.3.2"
+	}
 }
