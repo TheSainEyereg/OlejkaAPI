@@ -1356,14 +1356,95 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-surrealdb.js@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/surrealdb.js/-/surrealdb.js-0.11.0.tgz#56957c9be779899c851620b6d75b26c8b803db1c"
-  integrity sha512-x/Qd0UYyNilwY27JZlWgP8NsCdBzDtextRzP9oIm7xO27qsZvE5Rh4wnYN0xD68zgRAE4W8Jsufbm+hKbaGsTg==
-  dependencies:
-    unws "^0.2.3"
-    ws "^8.13.0"
-    zod "^3.22.4"
+surrealdb.node-android-arm-eabi@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-android-arm-eabi/-/surrealdb.node-android-arm-eabi-0.3.0.tgz#26eaed0dd297ace7a2a72a6a225e6d5cfc94cc57"
+  integrity sha512-upIv7DZGyadT2jkhMHTQG65ysolAIc/YfS8VVgJHXIh/9VSUH9um8uCEGqvVJoN4UgJc0V8Ise449/yxGgOKwg==
+
+surrealdb.node-android-arm64@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-android-arm64/-/surrealdb.node-android-arm64-0.3.0.tgz#fafcc4858e2fae181b5e9e666db7f85207a79f0a"
+  integrity sha512-u3cVhHUSqJDgXPPHgvMf1beHWm8uNRhpXHf39AhtpRjO0eH2OARUUpIQC3QUBhIzIx9rQCLGzSIBRN8OT52YpA==
+
+surrealdb.node-darwin-arm64@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-darwin-arm64/-/surrealdb.node-darwin-arm64-0.3.0.tgz#8cbb7c542a6fb18315c2c095ce0b2500c4c5e059"
+  integrity sha512-5GVevP0VwrQDrewJN8d3VxCwCLU+Py0AMTctCIbLYh3F1wgYqaf9wgYSusFj3BiXsJoS0Xq1I3n7WT1apCzJ4A==
+
+surrealdb.node-darwin-universal@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-darwin-universal/-/surrealdb.node-darwin-universal-0.3.0.tgz#c982d2fbc306048e0e6d2268206068ef58398ffa"
+  integrity sha512-4zYDllEvLQgIgU1lR1p1CjBmU4ak8vUDtNzOorvDCsvOaYmMHUF1KTaXdUoG40/qDOVVlKEmt0WYtaFlMigpKw==
+
+surrealdb.node-darwin-x64@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-darwin-x64/-/surrealdb.node-darwin-x64-0.3.0.tgz#f7f59dbd5e86516fae1ce247757e647b77fbb451"
+  integrity sha512-bvLmtI/dcfc6TGzaKEFq/OYIRWJVoEV9wF9VrRFT8UvZddjmZLyNDztlTkrE77jXCgj4EDfEFdg2W4Emkl27mA==
+
+surrealdb.node-freebsd-x64@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-freebsd-x64/-/surrealdb.node-freebsd-x64-0.3.0.tgz#8187c6dc397de2f3adb9f6db6cf8d0c58d89efe9"
+  integrity sha512-itViKRnde+sLGlnqNFaw5LuUJeQxY8n7vDM/8Mz64Uv+6BfA3++PAy7lrzohEZGyh6M/9sRVV2qTrIiCQatq9A==
+
+surrealdb.node-linux-arm-gnueabihf@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-linux-arm-gnueabihf/-/surrealdb.node-linux-arm-gnueabihf-0.3.0.tgz#53230d1cd802ddc8fe5f3dbe7b11030c0dce373d"
+  integrity sha512-7ZBfCJi1pD9upIRzXqYR8IcvfHtqLxoYwMiuDuWHwOW2ebgKDUSVG0ZKMuObIDfB0SC9OcFfkr6GZN5kUlfEnw==
+
+surrealdb.node-linux-arm64-gnu@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-linux-arm64-gnu/-/surrealdb.node-linux-arm64-gnu-0.3.0.tgz#1be908c0d555f58f21af8a7b244c9d9d08b3faf4"
+  integrity sha512-kcu64v26J2PRud/e2hOYlVfZJYPU+bsLvqt0PaYld9/64LNnTxp/F5vnKiTzBs2qARIos/YUHeT1ikuzFMm3IQ==
+
+surrealdb.node-linux-arm64-musl@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-linux-arm64-musl/-/surrealdb.node-linux-arm64-musl-0.3.0.tgz#8b536e0f10c94d8a79ac22ae49e18cfd89393b15"
+  integrity sha512-7OqCVkg05T9u5hB3Ukhn7b6BEY7LMCzL7zVXT3cg0V1KZZGlurLA+0mPiBeRwEia1ImP41KBjm1vg7yxxXhSmQ==
+
+surrealdb.node-linux-x64-gnu@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-linux-x64-gnu/-/surrealdb.node-linux-x64-gnu-0.3.0.tgz#4476ba2e541c4b95308e13567264f9e184c0435c"
+  integrity sha512-YavCv5k8g9qr1QiOqgdxVwYU+O56cWM4hOuea5SGtVMYZrh8XZMPgV5TAt/BUUoh129CBkhrDo41u0jJdcwMsA==
+
+surrealdb.node-linux-x64-musl@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-linux-x64-musl/-/surrealdb.node-linux-x64-musl-0.3.0.tgz#405be40b7a314eaa47c728dffb7072a028214c8c"
+  integrity sha512-P40RH5o2SBX9g4OrUHte2rF2aYPRIThYyMZqdI5HDKP1rxLnajHA4SPC5C3aYrKKCHOR99bAB3Vu4ee293cdwQ==
+
+surrealdb.node-win32-arm64-msvc@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-win32-arm64-msvc/-/surrealdb.node-win32-arm64-msvc-0.3.0.tgz#bdb8d9f1f1d1cd67cf7f8be41625ba7c9bac18cd"
+  integrity sha512-FkdeQ53b/ReEQeaZ5ZajO8AuZuJoWspq2SWpSowJuX0hG6I5pFpoZuEePTaHzJ4aEqK+Ngn1dGPzlEC8IVJd6A==
+
+surrealdb.node-win32-ia32-msvc@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-win32-ia32-msvc/-/surrealdb.node-win32-ia32-msvc-0.3.0.tgz#a3b6d6b9ffc55d8af33f9629e5237afc9a450134"
+  integrity sha512-jFgmgL3bK0fMFgYuAPpYHsqDy1aVO07owwtr3RezG2trJYBWriZLIH1KhnRgIAS9pLgyep+k5ST2uQc6K/V9aQ==
+
+surrealdb.node-win32-x64-msvc@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node-win32-x64-msvc/-/surrealdb.node-win32-x64-msvc-0.3.0.tgz#581a9d0f81798029a6fec35517936acfd685891f"
+  integrity sha512-ANPEwAkdPj8b01w4tBZysCNVcmxkQLEy8bCYdKb0TAebUEpr5G1lnZM1tQbWEnLOe46hoj1ApaSVdUiohEH6pw==
+
+surrealdb.node@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/surrealdb.node/-/surrealdb.node-0.3.0.tgz#06b23853a84614aafccce1f6720d4dbcd727926e"
+  integrity sha512-YckBGpyh612J/8Z8d/4bYC8rkuIXrBsmR+wxbnqUwA1BmtsKYHokB0oI6RvXqhxKS/hktGjzYft/dWQb2aJ1Xw==
+  optionalDependencies:
+    surrealdb.node-android-arm-eabi "0.3.0"
+    surrealdb.node-android-arm64 "0.3.0"
+    surrealdb.node-darwin-arm64 "0.3.0"
+    surrealdb.node-darwin-universal "0.3.0"
+    surrealdb.node-darwin-x64 "0.3.0"
+    surrealdb.node-freebsd-x64 "0.3.0"
+    surrealdb.node-linux-arm-gnueabihf "0.3.0"
+    surrealdb.node-linux-arm64-gnu "0.3.0"
+    surrealdb.node-linux-arm64-musl "0.3.0"
+    surrealdb.node-linux-x64-gnu "0.3.0"
+    surrealdb.node-linux-x64-musl "0.3.0"
+    surrealdb.node-win32-arm64-msvc "0.3.0"
+    surrealdb.node-win32-ia32-msvc "0.3.0"
+    surrealdb.node-win32-x64-msvc "0.3.0"
 
 text-table@^0.2.0:
   version "0.2.0"
@@ -1452,11 +1533,6 @@ undici-types@~5.26.4:
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-5.26.5.tgz#bcd539893d00b56e964fd2657a4866b221a65617"
   integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
 
-unws@^0.2.3:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/unws/-/unws-0.2.4.tgz#cb6f27a98a7fab4bf1c2f842648f9a2fc8be80f2"
-  integrity sha512-/N1ajiqrSp0A/26/LBg7r10fOcPtGXCqJRJ61sijUFoGZMr6ESWGYn7i0cwr7fR7eEECY5HsitqtjGHDZLAu2w==
-
 uri-js@^4.2.2:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-4.4.1.tgz#9b1a52595225859e55f669d928f88c6c57f2a77e"
@@ -1481,11 +1557,6 @@ wrappy@1:
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==
 
-ws@^8.13.0:
-  version "8.16.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.16.0.tgz#d1cd774f36fbc07165066a60e40323eab6446fd4"
-  integrity sha512-HS0c//TP7Ina87TfiPUz1rQzMhHrl/SG2guqRcTOIUYD2q8uhUdNHZYJUaQ8aTGPzCh+c6oawMKW35nFl1dxyQ==
-
 yallist@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
@@ -1500,8 +1571,3 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
-
-zod@^3.22.4:
-  version "3.22.4"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.4.tgz#f31c3a9386f61b1f228af56faa9255e845cf3fff"
-  integrity sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==
