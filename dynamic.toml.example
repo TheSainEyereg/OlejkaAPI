@@ -1,0 +1,37 @@
+# Dynamic API settings that will be reloaded on file update
+# [R] - required fields (entire section will be skipped if not set)
+# [O] - optional fields
+
+max_load = 0.75 # [O] API will throw 503 error if load bigger than max_load. If not set  is 1
+master_key = "1337" # [R] Used for uploading and creating entities.
+
+# Upload functionality (will be disabled if not set)
+[uploader]
+path = "debug" # [R] Upload path
+extensions = [ # [O] Allowed file extensions. If not set all extensions will be allowed
+	"png", "jpg", "bmp", "webp", "ico", "svg", "gif", "apng", "pic",
+	"rar", "zip", "7z",
+	"mp4", "avi",
+	"mp3", "ogg", "opus", "wav",
+	"txt", "cfg", "log", "json", "xml", "yaml", "csv", "yml", "toml",
+	"h", "c", "cpp", "java", "cs", "lua", "html", "css", "js",
+	"exe", "dll"
+]
+
+# Watermark. Comment out or remove this section if you don't want to use watermark
+[uploader.watermark]
+max_load = 0.5 # [O] Will not rendder watermark if load bigger than max_load. Default is top level max_load or 1 if not set
+url = "file://debug/watermark.png" # [R] http(s):// or file:// url
+extensions = ["png", "jpg", "bmp", "webp"] # [R] File extensions for watermark applying
+size = [ 0.25, 45, 20 ] # [R] Size in format [multiplier, max in pixels, min in pixels]
+
+# Figlet settings
+[figlet]
+font = "Big" # [O] Default font
+
+# Social & contact section
+[social.github]
+url = "https://github.com/TheSainEyereg" # [R] Link to profile on resource
+username = "@TheSainEyereg" # [O] Username on resource (i.e. for copying)
+name = "GitHub" # [O] Resource name
+icon = "oi-github" # [O] Resource icon identifier that will be used on rendering

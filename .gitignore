@@ -132,4 +132,4 @@ dist
 # API
 old
 debug
-config.toml
+dynamic.toml
