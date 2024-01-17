@@ -36,6 +36,5 @@ font = "Big" # [O] Default font
 url = "https://github.com/TheSainEyereg" # [R] Link to profile on resource
 username = "@TheSainEyereg" # [O] Username on resource (i.e. for copying)
 name = "GitHub" # [O] Resource name
-icon = "oi-github" # [O] Resource icon identifier that will be used on rendering
 except = [ "RU" ] # [O] Do not show on specific countries
 only = [ "US" ] # [O] Only show in specific countries

@@ -4,10 +4,12 @@ import { config } from "../utils";
 export const getAll = (req: FastifyRequest, reply: FastifyReply) => {
 	const { client: { country } } = req;
 	const { social } = config.getConfig();
+	
+	reply.header("Access-Control-Allow-Origin", "*");
 
 	reply.send(
-		Object.values(social)
-			.filter(({ except, only }) => (!only || country && only.includes(country)) && (!except || country && !except.includes(country)))
-			.map(({ url, username, name, icon }) => ({ url, username, name, icon }))
+		Object.entries(social)
+			.filter(([, { except, only } ]) => (!only || country && only.includes(country)) && (!except || country && !except.includes(country)))
+			.map(([ id, { url, username, name } ]) => ({ id, url, username, name }))
 	);
 };
