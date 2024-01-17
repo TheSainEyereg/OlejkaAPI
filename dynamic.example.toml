@@ -3,7 +3,9 @@
 # [O] - optional fields
 
 max_load = 0.75 # [O] API will throw 503 error if load bigger than max_load. If not set  is 1
-master_key = "1337" # [R] Used for uploading and creating entities.
+master_key = "1337" # [R] Used for uploading and creating entities
+url = "https://polygon.olejka.ru/api" # [R] API url used for self-reference
+
 
 # Upload functionality (will be disabled if not set)
 [uploader]
@@ -35,3 +37,5 @@ url = "https://github.com/TheSainEyereg" # [R] Link to profile on resource
 username = "@TheSainEyereg" # [O] Username on resource (i.e. for copying)
 name = "GitHub" # [O] Resource name
 icon = "oi-github" # [O] Resource icon identifier that will be used on rendering
+except = [ "RU" ] # [O] Do not show on specific countries
+only = [ "US" ] # [O] Only show in specific countries

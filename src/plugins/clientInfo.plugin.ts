@@ -1,7 +1,7 @@
 import { FastifyPluginAsync, FastifyRequest } from "fastify";
 import fp from "fastify-plugin";
 
-interface APM {
+interface ClientInfo {
 	readonly ip: string | null;
 	readonly country: string | null;
 
@@ -14,7 +14,7 @@ interface APM {
 
 declare module "fastify" {
 	interface FastifyRequest {
-		apm: APM;
+		client: ClientInfo;
 	}
 }
 
@@ -25,7 +25,7 @@ const plugin: FastifyPluginAsync = async (app) => {
 			"CF-Connecting-IP": string;
 		};
 	}>) => {
-		req.apm = {
+		req.client = {
 			ip: req.headers["cf-connecting-ip"] || null,
 			country: req.headers["cf-ipcountry"] || null,
 			

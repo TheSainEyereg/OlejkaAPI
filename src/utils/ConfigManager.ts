@@ -4,7 +4,8 @@ import TOML from "toml";
 
 interface ConfigFile {
 	max_load?: number;
-	master_key?: string;
+	master_key: string;
+	url: string;
 	uploader?: {
 		path: string;
 		extensions?: string[];
@@ -28,6 +29,9 @@ interface ConfigFile {
 			username?: string;
 			name?: string;
 			icon?: string;
+
+			only?: string[];
+			except?: string[];
 		};
 	};
 }
@@ -35,6 +39,7 @@ interface ConfigFile {
 interface Config {
 	maxLoad: number;
 	masterKey: string;
+	url: string;
 
 	uploader?: {
 		path: string;
@@ -61,6 +66,9 @@ interface Config {
 			username?: string;
 			name?: string;
 			icon?: string;
+
+			only?: string[];
+			except?: string[];
 		};
 	};
 }
@@ -77,11 +85,13 @@ export default class ConfigManager {
 		const file = await readFile(this.path, "utf-8");
 		const content: ConfigFile = TOML.parse(file);
 
-		const { master_key: masterKey, max_load, uploader, figlet, social } = content;
+		const { master_key: masterKey, url, max_load, uploader, figlet, social } = content;
 		if (!masterKey) throw new Error("Missing master key");
+		if (!url) throw new Error("Missing API url");
 
 		const config: Config = {
 			masterKey,
+			url,
 			maxLoad: max_load || 1,
 
 			figlet: {
@@ -117,11 +127,11 @@ export default class ConfigManager {
 
 		if (social) {
 			for (const [key, value] of Object.entries(social)) {
-				const { url, username, name, icon } = value;
+				const { url } = value;
 
 				if (!url) throw new Error(`Missing social url for ${key}`);
 
-				config.social[key] = { url, username, name, icon };
+				config.social[key] = value;
 			}
 		}
 
