@@ -15,8 +15,10 @@
 		"start": "node dist/app"
 	},
 	"dependencies": {
+		"canvas": "^2.11.2",
 		"dotenv": "^16.3.1",
 		"fastify": "^4.24.3",
+		"fastify-plugin": "^4.5.1",
 		"surrealdb.node": "^0.3.0",
 		"toml": "^3.0.0"
 	},

@@ -23,7 +23,7 @@ extensions = [ # [O] Allowed file extensions. If not set all extensions will be 
 max_load = 0.5 # [O] Will not rendder watermark if load bigger than max_load. Default is top level max_load or 1 if not set
 url = "file://debug/watermark.png" # [R] http(s):// or file:// url
 extensions = ["png", "jpg", "bmp", "webp"] # [R] File extensions for watermark applying
-size = [ 0.25, 45, 20 ] # [R] Size in format [multiplier, max in pixels, min in pixels]
+size = { mult = 0.25, max = 45, min = 20 } # [R] Size of watermark
 
 # Figlet settings
 [figlet]

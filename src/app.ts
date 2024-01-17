@@ -1,9 +1,3 @@
-import { env } from "node:process";
-import dotenv from "dotenv";
-import Fastify from "fastify";
+import { api } from "./API";
 
-dotenv.config();
-
-const app = Fastify();
-
-app.listen({ port: Number(env.PORT) || 5050 });
+api.launch().then(api.config.watchConfig);
