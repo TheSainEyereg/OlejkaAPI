@@ -23,7 +23,7 @@ async function build() {
 	await app.register(figletRouter, { prefix: "/figlet" });
 	// await app.register(discordRouter, { prefix: "/discord" });
 
-	app.get("/", (req) =>`Olejka API v3 \n\nTime: ${req.time} \nLoad: ${req.load} ${req.client.isValid() ? `\nFrom: ${req.client.country} (${req.client.ip.split(".")[0]})` : ""}`);
+	app.get("/", (req) =>`Olejka API v3 \n\nTime: ${req.time} \nLoad: ${req.load} ${req.client.isValid() ? `\nFrom: ${req.client.country} (${req.client.ip.split(/\.|:/)[0]})` : ""}`);
 }
 
 build()
