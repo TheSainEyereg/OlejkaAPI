@@ -6,6 +6,7 @@ import identity from "./plugins/identity.plugin";
 import clientInfo from "./plugins/clientInfo.plugin";
 import socialRouter from "./routes/social.router";
 import figletRouter from "./routes/figlet.router";
+import linksRouter from "./routes/links.router";
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ async function build() {
 	
 	await app.register(socialRouter, { prefix: "/social" });
 	// await app.register(uploaderRouter, { prefix: "/files" });
-	// await app.register(linksRouter, { prefix: "/links" });
+	await app.register(linksRouter, { prefix: "/links" });
 	await app.register(figletRouter, { prefix: "/figlet" });
 	// await app.register(discordRouter, { prefix: "/discord" });
 

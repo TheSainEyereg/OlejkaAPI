@@ -38,3 +38,7 @@ username = "@TheSainEyereg" # [O] Username on resource (i.e. for copying)
 name = "GitHub" # [O] Resource name
 except = [ "RU" ] # [O] Do not show on specific countries
 only = [ "US" ] # [O] Only show in specific countries
+
+# Static redir adresses
+[links]
+default = "https://olejka.ru/"

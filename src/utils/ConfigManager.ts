@@ -34,6 +34,10 @@ interface ConfigFile {
 			except?: string[];
 		};
 	};
+	links?: {
+		default: string;
+		[key: string]: string;
+	};
 }
 
 interface Config {
@@ -71,6 +75,11 @@ interface Config {
 			except?: string[];
 		};
 	};
+
+	links: {
+		default: string;
+		static: Record<string, string>;
+	};
 }
 
 export default class ConfigManager {
@@ -85,7 +94,7 @@ export default class ConfigManager {
 		const file = await readFile(this.path, "utf-8");
 		const content: ConfigFile = TOML.parse(file);
 
-		const { master_key: masterKey, url, max_load, uploader, figlet, social } = content;
+		const { master_key: masterKey, url, max_load, uploader, figlet, social, links } = content;
 		if (!masterKey) throw new Error("Missing master key");
 		if (!url) throw new Error("Missing API url");
 
@@ -99,6 +108,11 @@ export default class ConfigManager {
 			},
 
 			social: {},
+
+			links: {
+				default: "",
+				static: {},
+			},
 		};
 
 		if (uploader) {
@@ -132,6 +146,16 @@ export default class ConfigManager {
 				if (!url) throw new Error(`Missing social url for ${key}`);
 
 				config.social[key] = value;
+			}
+		}
+
+		if (links) {
+			config.links.default = links.default || "";
+
+			for (const [key, value] of Object.entries(links)) {
+				if (key !== "default") {
+					config.links.static[key] = value;
+				}
 			}
 		}
 
