@@ -20,7 +20,7 @@
 		"fastify": "^4.24.3",
 		"fastify-plugin": "^4.5.1",
 		"figlet": "^1.7.0",
-		"surrealdb.node": "^0.3.0",
+		"mongoose": "^8.9.5",
 		"toml": "^3.0.0"
 	},
 	"devDependencies": {
