@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { config } from "../utils";
+import { config } from "../utils/index.ts";
 
 export const getAll = (req: FastifyRequest, reply: FastifyReply) => {
 	const { client: { country } } = req;

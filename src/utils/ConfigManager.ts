@@ -1,8 +1,7 @@
-import { resolve } from "node:path";
-import { readFile, watch } from "node:fs/promises";
-import TOML from "toml";
+import { parse } from "@std/toml";
 
 interface ConfigFile {
+	[key: string]: unknown;
 	max_load?: number;
 	master_key: string;
 	url: string;
@@ -87,12 +86,12 @@ export default class ConfigManager {
 	private path: string;
 
 	constructor(path: string) {
-		this.path = resolve(path);
+		this.path = Deno.realPathSync(path);
 	}
 
 	async loadConfig() {
-		const file = await readFile(this.path, "utf-8");
-		const content: ConfigFile = TOML.parse(file);
+		const file = await Deno.readTextFile(this.path);
+		const content = parse(file) as ConfigFile;
 
 		const { master_key: masterKey, url, max_load, uploader, figlet, social, links } = content;
 		if (!masterKey) throw new Error("Missing master key");
@@ -163,10 +162,10 @@ export default class ConfigManager {
 	}
 
 	watchConfig = async () => {
-		const watcher = watch(this.path);
+		const watcher = Deno.watchFs(this.path);
 		console.log("Watching config file at", this.path);
-		for await (const { eventType } of watcher) {
-			if (eventType !== "change") continue;
+		for await (const event of watcher) {
+			if (event.kind !== "modify") continue;
 
 			try {
 				await this.loadConfig();

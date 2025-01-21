@@ -5,10 +5,8 @@ interface ClientInfo {
 	readonly ip: string | null;
 	readonly country: string | null;
 
-	isValid(): this is {
-		ip: string;
-		country: string;
-	};
+	// isValid(): this is ClientInfo & { ip: string; country: string };
+	isValid(): boolean;  // Fuck TS 5.5
 	isFrom(country: string): boolean;
 }
 
@@ -30,7 +28,7 @@ const plugin: FastifyPluginAsync = async (app) => {
 			country: req.headers["cf-ipcountry"] || null,
 			
 			isValid() {
-				return this.ip !== null && this.country !== null;
+				return typeof this.ip === "string" && typeof this.country === "string";
 			},
 			isFrom(country) {
 				return this.country?.toLowerCase() === country.toLowerCase();

@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+// @ts-types="npm:@types/figlet"
 import figlet, { Fonts } from "figlet";
-import { config } from "../utils";
+import { config } from "../utils/index.ts";
 
 export const generate = (req: FastifyRequest<{
 	Querystring: {

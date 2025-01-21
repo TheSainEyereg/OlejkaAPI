@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { redir } from "../controllers/links.controller";
+import { redir } from "../controllers/links.controller.ts";
 
 const router: FastifyPluginAsync = async (app) => {
 	app.get("/", redir);

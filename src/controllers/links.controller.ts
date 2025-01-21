@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { config } from "../utils";
+import { config } from "../utils/index.ts";
 
 export const redir = (req: FastifyRequest<{
 	Params: {
