@@ -1,24 +1,37 @@
 {
-  "tasks": {
-    "start": "deno run --allow-sys --allow-read --allow-env --allow-net src/app.ts",
-    "dev": "deno run --allow-sys --allow-read --allow-env --allow-net --watch src/app.ts",
-    "dev:debug": "deno run --allow-sys --allow-read --allow-env --allow-net --watch --inspect src/app.ts"
-  },
-  "imports": {
-    "@gfx/canvas": "jsr:@gfx/canvas@^0.5.8",
-    "@std/dotenv": "jsr:@std/dotenv@^0.225.3",
-    "@std/toml": "jsr:@std/toml@^1.0.2",
-    "@types/figlet": "npm:@types/figlet@^1.7.0",
-    "fastify": "npm:fastify@^5.2.1",
-    "fastify-plugin": "npm:fastify-plugin@^5.0.1",
-    "figlet": "npm:figlet@^1.8.0",
-    "mongoose": "npm:mongoose@^8.9.5"
-  },
-  "lint": {
-    "rules": {
-      "exclude": [
-        "require-await"
-      ]
-    }
-  }
+	"tasks": {
+		"start": "deno run --allow-sys --allow-read --allow-env --allow-net src/app.ts",
+		"dev": "deno run --allow-sys --allow-read --allow-env --allow-net --watch src/app.ts",
+		"dev:debug": "deno run --allow-sys --allow-read --allow-env --allow-net --watch --inspect src/app.ts"
+	},
+	"imports": {
+		"@gfx/canvas": "jsr:@gfx/canvas@^0.5.8",
+		"@std/dotenv": "jsr:@std/dotenv@^0.225.3",
+		"@std/toml": "jsr:@std/toml@^1.0.2",
+		"@types/figlet": "npm:@types/figlet@^1.7.0",
+		"fastify": "npm:fastify@^5.2.1",
+		"fastify-plugin": "npm:fastify-plugin@^5.0.1",
+		"figlet": "npm:figlet@^1.8.0",
+		"mongoose": "npm:mongoose@^8.9.5"
+	},
+	"lint": {
+		"rules": {
+			"exclude": [
+				"require-await"
+			]
+		},
+    "include": [
+      "src/"
+    ]
+	},
+	"fmt": {
+		"useTabs": true,
+		"indentWidth": 4,
+		"lineWidth": 100,
+		"semiColons": true,
+		"singleQuote": false,
+    "include": [
+      "src/"
+    ]
+	}
 }

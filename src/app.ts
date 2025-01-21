@@ -17,17 +17,25 @@ async function build() {
 
 	await app.register(identity);
 	await app.register(clientInfo);
-	
+
 	await app.register(socialRouter, { prefix: "/social" });
 	// await app.register(uploaderRouter, { prefix: "/files" });
 	await app.register(linksRouter, { prefix: "/links" });
 	await app.register(figletRouter, { prefix: "/figlet" });
 	// await app.register(discordRouter, { prefix: "/discord" });
 
-	app.get("/", (req) =>`Olejka API v3 (powered by Deno) \n\nTime: ${req.time} \nLoad: ${req.load} ${req.client.isValid() ? `\nFrom: ${req.client.country!} (${req.client.ip!.split(/\.|:/)[0]})` : ""}`);
+	app.get(
+		"/",
+		(req) =>
+			`Olejka API v3 (powered by Deno) \n\nTime: ${req.time} \nLoad: ${req.load} ${
+				req.client.isValid()
+					? `\nFrom: ${req.client.country!} (${req.client.ip!.split(/\.|:/)[0]})`
+					: ""
+			}`,
+	);
 }
 
 build()
 	.then(() => app.listen({ port: Number(Deno.env.get("PORT")) || 5050, host: "0.0.0.0" }))
-	.then(at => console.log("Server started at", at))
+	.then((at) => console.log("Server started at", at))
 	.then(config.watchConfig);

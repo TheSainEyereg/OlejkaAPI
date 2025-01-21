@@ -3,13 +3,16 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import figlet, { Fonts } from "figlet";
 import { config } from "../utils/index.ts";
 
-export const generate = (req: FastifyRequest<{
-	Querystring: {
-		text: string;
-		font?: string;
-		plain?: boolean;
-	};
-}>, reply: FastifyReply) => {
+export const generate = (
+	req: FastifyRequest<{
+		Querystring: {
+			text: string;
+			font?: string;
+			plain?: boolean;
+		};
+	}>,
+	reply: FastifyReply,
+) => {
 	const { text, font: unsanitizedFont, plain } = req.query;
 	const { figlet: figletConfig } = config.getConfig();
 
@@ -21,19 +24,24 @@ export const generate = (req: FastifyRequest<{
 		if (err) {
 			const { message } = err;
 
-			if (err.message.includes("ENOENT: no such file or directory") && message.includes(`${font}.flf`)) return reply.status(404).send({
-				error: `Font ${font} was not found!`,
-				errorDetails: {
-					fonts: figlet.fontsSync()
-				}
-			});
+			if (
+				err.message.includes("ENOENT: no such file or directory") &&
+				message.includes(`${font}.flf`)
+			) {
+				return reply.status(404).send({
+					error: `Font ${font} was not found!`,
+					errorDetails: {
+						fonts: figlet.fontsSync(),
+					},
+				});
+			}
 
 			return reply.status(500).send({
 				error: "Unknown error!",
-				errorDetails: message
+				errorDetails: message,
 			});
 		}
-		
+
 		reply.send(plain ? text : { text, font });
 	});
 };

@@ -127,13 +127,15 @@ export default class ConfigManager {
 				const { max_load, url, extensions, size } = watermark;
 				if (!url) throw new Error("Missing watermark url");
 				if (!extensions.length) throw new Error("Missing watermark extensions");
-				if (!size?.mult || !size?.max || !size?.min) throw new Error("Missing watermark size");
+				if (!size?.mult || !size?.max || !size?.min) {
+					throw new Error("Missing watermark size");
+				}
 
 				config.uploader.watermark = {
 					maxLoad: max_load || config.maxLoad,
 					url,
 					extensions,
-					size
+					size,
 				};
 			}
 		}
@@ -176,6 +178,6 @@ export default class ConfigManager {
 			}
 		}
 	};
-	
+
 	getConfig = () => this.config!;
 }
