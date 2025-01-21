@@ -30,8 +30,8 @@
 		"lineWidth": 100,
 		"semiColons": true,
 		"singleQuote": false,
-    "include": [
-      "src/"
-    ]
+		"include": [
+			"src/"
+		]
 	}
 }

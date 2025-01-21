@@ -3,7 +3,17 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import figlet, { Fonts } from "figlet";
 import { config } from "../utils/index.ts";
 
-export const generate = (
+const getFonts = () =>
+	new Promise((res, rej) =>
+		figlet.fonts((err, fonts) => err ? rej(err) : res(fonts || []))
+	) as Promise<Fonts[]>;
+
+const getText = (text: string, font: Fonts) =>
+	new Promise((res, rej) =>
+		figlet.text(text, { font }, (err, text) => err ? rej(err) : res(text || ""))
+	);
+
+export const generate = async (
 	req: FastifyRequest<{
 		Querystring: {
 			text: string;
@@ -13,35 +23,27 @@ export const generate = (
 	}>,
 	reply: FastifyReply,
 ) => {
-	const { text, font: unsanitizedFont, plain } = req.query;
+	const { text: textString, font: fontString, plain } = req.query;
 	const { figlet: figletConfig } = config.getConfig();
 
-	const font = (unsanitizedFont?.replace(/.?.(\/|\\)/gi, "") || figletConfig.font) as Fonts;
+	const font = (fontString || figletConfig.font) as Fonts;
 
-	if (!text) return reply.status(400).send({ error: "No text specified" });
+	if (!textString) {
+		return reply.status(400).send({ error: "No text specified" });
+	}
 
-	figlet.text(text, { font }, (err, text) => {
-		if (err) {
-			const { message } = err;
+	const fonts = await getFonts();
 
-			if (
-				err.message.includes("ENOENT: no such file or directory") &&
-				message.includes(`${font}.flf`)
-			) {
-				return reply.status(404).send({
-					error: `Font ${font} was not found!`,
-					errorDetails: {
-						fonts: figlet.fontsSync(),
-					},
-				});
-			}
+	if (!fonts.includes(font)) {
+		return reply.status(404).send({
+			error: `Font ${font} was not found!`,
+			errorDetails: {
+				fonts,
+			},
+		});
+	}
 
-			return reply.status(500).send({
-				error: "Unknown error!",
-				errorDetails: message,
-			});
-		}
+	const text = await getText(textString, font);
 
-		reply.send(plain ? text : { text, font });
-	});
+	return plain ? text : { text, font };
 };

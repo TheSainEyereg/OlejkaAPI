@@ -27,7 +27,7 @@ async function build() {
 	app.get(
 		"/",
 		(req) =>
-			`Olejka API v3 (powered by Deno) \n\nTime: ${req.time} \nLoad: ${req.load} ${
+			`Olejka API v3 (Deno ${Deno.version.deno}) \n\nTime: ${req.time} \nLoad: ${req.load} ${
 				req.client.isValid()
 					? `\nFrom: ${req.client.country!} (${req.client.ip!.split(/\.|:/)[0]})`
 					: ""
